@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 # bin/compile <build-dir> <cache-dir>
 
-echo "-----> Nothing to do."
+echo "-----> Setting PORTAL_HOME"
+
+echo "export PORTAL_HOME=\$(pwd)" >> export
