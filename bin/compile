@@ -3,4 +3,4 @@
 
 echo "-----> Setting PORTAL_HOME"
 
-echo "export PORTAL_HOME=\${1}" >> export
+echo "export PORTAL_HOME=${1}" >> export
