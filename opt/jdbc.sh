@@ -1,39 +1,17 @@
-#!/usr/bin/env bash
+if [ -n "$CLEARDB_DATABASE_URL" ]; then
+    jdbc_protocol="jdbc:mysql"
+    db_user=$(expr "$db_url" : "${db_protocol}://\(.\+\):\(.\+\)@")
+    db_prefix="${db_protocol}://${db_user}:"
 
-set_jdbc_url() {
-  local db_url=${1}
+    db_pass=$(expr "$db_url" : "${db_prefix}\(.\+\)@")
+    db_prefix="${db_prefix}${db_pass}@"
 
-  if [ -z "$JDBC_DATABASE_URL" ]; then
-      local db_protocol=$(expr "$db_url" : "\(.\+\)://")
-      if [ "$db_protocol" == "postgres" ]; then
-	  local jdbc_protocol="jdbc:postgresql"
-      elif [ "$db_protocol" == "mysql" ]; then
-	  local jdbc_protocol="jdbc:mysql"
-      fi
+    db_host_port=$(expr "$db_url" : "${db_prefix}\(.\+\)/")
+    db_prefix="${db_prefix}${db_host_port}/"
 
-      if [ -n "$jdbc_protocol" ]; then
-	  local db_user=$(expr "$db_url" : "${db_protocol}://\(.\+\):\(.\+\)@")
-	  local db_prefix="${db_protocol}://${db_user}:"
+    db_suffix=$(expr "$db_url" : "${db_prefix}\(.\+\)")
 
-	  local db_pass=$(expr "$db_url" : "${db_prefix}\(.\+\)@")
-	  db_prefix="${db_prefix}${db_pass}@"
-
-	  local db_host_port=$(expr "$db_url" : "${db_prefix}\(.\+\)/")
-	  db_prefix="${db_prefix}${db_host_port}/"
-
-	  local db_suffix=$(expr "$db_url" : "${db_prefix}\(.\+\)")
-
-	  export JDBC_DATABASE_URL="${jdbc_protocol}://${db_host_port}/${db_suffix}"
-	  export JDBC_DATABASE_USERNAME="${db_user}"
-	  export JDBC_DATABASE_PASSWORD="${db_pass}"
-      fi
-  fi
-}
-
-if [ -n "$DATABASE_URL" ]; then
-  set_jdbc_url "$DATABASE_URL"
-elif [ -n "$JAWSDB_URL" ]; then
-  set_jdbc_url "$JAWSDB_URL"
-elif [ -n "$CLEARDB_DATABASE_URL" ]; then
-  set_jdbc_url "$CLEARDB_DATABASE_URL"
+    export JDBC_DATABASE_URL="${jdbc_protocol}://${db_host_port}/${db_suffix}"
+    export JDBC_DATABASE_USERNAME="${db_user}"
+    export JDBC_DATABASE_PASSWORD="${db_pass}"
 fi

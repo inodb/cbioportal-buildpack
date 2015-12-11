@@ -3,8 +3,4 @@
 
 echo "-----> Setting PORTAL_HOME"
 
-BP_DIR=$(cd $(dirname $0)/..; pwd)
-cp $BP_DIR/opt/jdbc.sh export
 echo "export PORTAL_HOME=${1}" >> export
-
-cat export
