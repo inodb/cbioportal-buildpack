@@ -23,13 +23,7 @@ set_jdbc_url() {
 
 	  local db_suffix=$(expr "$db_url" : "${db_prefix}\(.\+\)")
 
-          if [[ "$db_suffix" == *\?* ]]; then
-            local db_args="&user=${db_user}&password=${db_pass}"
-	  else
-            local db_args="?user=${db_user}&password=${db_pass}"
-	  fi
-
-	  export JDBC_DATABASE_URL="${jdbc_protocol}://${db_host_port}/${db_suffix}${db_args}"
+	  export JDBC_DATABASE_URL="${jdbc_protocol}://${db_host_port}/${db_suffix}"
 	  export JDBC_DATABASE_USERNAME="${db_user}"
 	  export JDBC_DATABASE_PASSWORD="${db_pass}"
       fi
