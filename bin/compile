@@ -4,3 +4,7 @@
 echo "-----> Setting PORTAL_HOME"
 
 echo "export PORTAL_HOME=${1}" >> export
+
+echo "-----> Copying heroku/ to root directoy"
+cp -r heroku/* .
+cp -r heroku/.profile.d .
